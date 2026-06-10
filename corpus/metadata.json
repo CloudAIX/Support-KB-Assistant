@@ -1,0 +1,8 @@
+{
+  "kb/billing-and-refunds.md":   { "doc_type": "kb_article", "product_area": "billing" },
+  "kb/account-and-login.md":     { "doc_type": "kb_article", "product_area": "account" },
+  "kb/plans-and-upgrades.md":    { "doc_type": "kb_article", "product_area": "plans" },
+  "kb/shipping-and-delivery.md": { "doc_type": "kb_article", "product_area": "shipping" },
+  "kb/troubleshooting.md":       { "doc_type": "kb_article", "product_area": "technical" },
+  "kb/data-and-privacy.md":      { "doc_type": "kb_article", "product_area": "privacy" }
+}

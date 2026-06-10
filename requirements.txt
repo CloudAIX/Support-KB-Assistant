@@ -1,0 +1,10 @@
+# Support KB Assistant — Week 2 RAG (v0 scaffold)
+streamlit>=1.40
+anthropic>=0.40
+chromadb>=0.5
+rank-bm25>=0.2.2
+python-dotenv>=1.0
+# Embeddings: default OpenAI (matches the course demo). Local fallback is optional.
+openai>=1.50
+# Optional local embeddings (no API key). Uncomment if you set EMBED_PROVIDER=local:
+# sentence-transformers>=3.0
