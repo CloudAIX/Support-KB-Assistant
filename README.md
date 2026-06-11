@@ -19,27 +19,40 @@ made up. There are no real company names or real customer details.
   - by exact words (sparse / BM25 keyword search).
 - It joins the two result lists into one (Reciprocal Rank Fusion), keeps the top
   few pieces, and asks the model to write a grounded answer with citations.
+- If the model cannot ground a confident answer, it escalates to a human agent
+  with a tone-matched handoff message rather than refusing silently.
+
+## Architecture flow
+
+![Architecture](docs/architecture.png)
 
 ## How to run it
 
 1. Create and activate a virtual environment, then install the packages:
-   ```
+
+   ```sh
    pip install -r requirements.txt
    ```
+
 2. Copy `.env.example` to `.env` and fill in your keys.
+
 3. Build the search index once:
-   ```
+
+   ```sh
    python3 src/ingest.py
    ```
+
 4. Start the app:
-   ```
+
+   ```sh
    python3 -m streamlit run src/app.py
    ```
+
    Export your keys in the same terminal session before you start the app.
 
 ## Project layout
 
-```
+```text
 support-kb-rag/
   corpus/
     kb/              help articles (Markdown)
@@ -49,13 +62,18 @@ support-kb-rag/
     embeddings.py    turns text into numbers (OpenAI by default; local option)
     ingest.py        build-time: load, chunk, embed, store
     rag.py           run-time: hybrid retrieve, fuse, grounded answer
-    app.py           a simple chat screen
+    app.py           Streamlit chat UI with escalation-to-human handoff
   requirements.txt
   .env.example
+  evaluation-report.md
 ```
 
 ## Status
 
-This is a v0 scaffold, set up before the course project brief was released. It is
-meant to be a clean starting point, not the finished submission. See `SPEC.md` for
-what is in scope, what is left for later, and the decisions behind it.
+Week 2 submission — complete. The build includes hybrid retrieval (BM25 + dense,
+RRF-fused), a Streamlit chat interface, a Nebius model comparison (Claude vs
+Llama 3.3 70B), and escalation-to-human handoff with tone-aware messaging.
+
+Evaluated against 20 synthetic questions: **18/20 passed (90%), 100% refusal
+accuracy.** See `evaluation-report.md` for the full analysis including failure
+breakdowns and model comparison.
