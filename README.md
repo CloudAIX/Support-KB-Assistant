@@ -26,6 +26,13 @@ made up. There are no real company names or real customer details.
 
 ![Architecture](docs/architecture.png)
 
+## LangChain / LangGraph version
+
+A second implementation of the same pipeline lives in `langchain-version/`,
+built with LangChain and LangGraph as a learning exercise. It is not the
+submitted Week 2 work — `src/` is. The two are kept separate so it stays clear
+which is which.
+
 ## How to run it
 
 1. Create and activate a virtual environment, then install the packages:
