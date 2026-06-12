@@ -92,7 +92,7 @@ def answer_nebius(query: str, where: dict | None = None) -> str:
     return resp.choices[0].message.content
 
 # Phrases that mean "the model couldn't ground an answer".
-_REFUSAL_SIGNALS = ("i don't know", "based on the provided sources", "could not find")
+_REFUSAL_SIGNALS = ("i don't know", "i don't have", "could not find")
 
 ESCALATION_MESSAGES = {
     "warm": (

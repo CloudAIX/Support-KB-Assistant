@@ -67,7 +67,7 @@ TESTS = [
              ["shipping-and-delivery", "data-and-privacy"]),
 
     TestCase(13, "ambiguous", "It's not working", []),
-    TestCase(14, "ambiguous", "I have a billing problem", ["billing-and-refunds"]),
+    TestCase(14, "ambiguous", "I have a billing problem", ["billing-and-refunds", "troubleshooting"]),
     TestCase(15, "ambiguous", "Something's wrong with my account", ["account-and-login"]),
     TestCase(16, "ambiguous", "When will it arrive?", ["shipping-and-delivery"]),
 
@@ -83,7 +83,8 @@ TESTS = [
 REFUSAL_MARKERS = [
     "i don't know", "i do not know", "don't have", "do not have",
     "not in the", "could not find", "couldn't find", "no information",
-    "not mentioned", "don't mention", "do not mention", "based on the provided sources",
+    "not mentioned", "don't mention", "do not mention",
+    "i don't know based on the provided sources",
 ]
 
 
