@@ -1,10 +1,9 @@
 """Query (run-time, every user question).
-Hybrid retrieve (dense Chroma + sparse BM25) -> RRF fuse -> grounded answer with
-citations and an "I don't know" refusal. Optional metadata pre-filter.
+Hybrid retrieve (dense Chroma + sparse BM25) -> RRF fuse -> cross-encoder rerank
+-> grounded answer with citations and an "I don't know" refusal. Optional metadata pre-filter.
 Course parallel: notebook 3 (hybrid) + the metadata-filter notebook. The instructors'
 line for support domains: start with hybrid. We do.
-TODO (vibe session): add a cross-encoder reranker (the deck's "single biggest win",
-v1.1); wire the metadata-filter LLM call into the UI.
+TODO: wire the metadata-filter LLM call into the UI.
 """
 import os
 import json
@@ -15,6 +14,7 @@ from anthropic import Anthropic
 from openai import OpenAI
 from dotenv import load_dotenv
 from embeddings import embed
+from rerank import rerank
 
 load_dotenv()
 
@@ -60,10 +60,12 @@ def retrieve(query: str, top_k: int = 5, where: dict | None = None):
     scored = sorted(zip(corpus_ids, bm25.get_scores(query.split())), key=lambda x: -x[1])
     sparse_ids = [cid for cid, _ in scored[:n]]
     fused = _rrf([dense_ids, sparse_ids])
-    top_ids = sorted(fused, key=lambda i: -fused[i])[:top_k]
-    got = col.get(ids=top_ids)
+    # Wide recall set (up to n candidates) fed into the cross-encoder precision pass.
+    wide_ids = sorted(fused, key=lambda i: -fused[i])[:n]
+    got = col.get(ids=wide_ids)
     by_id = dict(zip(got["ids"], got["documents"]))
-    return [(cid, by_id[cid]) for cid in top_ids if cid in by_id]
+    candidates = [(cid, by_id[cid]) for cid in wide_ids if cid in by_id]
+    return rerank(query, candidates, top_k=top_k)
 def answer(query: str, where: dict | None = None) -> str:
     chunks = retrieve(query, where=where)
     context = "\n\n".join(f"[{cid}] {text}" for cid, text in chunks)
